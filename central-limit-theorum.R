@@ -20,15 +20,6 @@ generate_parent_pop <- function(type_of_distribution, number_of_obs = 1000, mean
     df <- data.frame(X = rchisq (number_of_obs, df))
   }
 }
-df = generate_parent_pop(type_of_distribution = 'normal')
-
-# Plot the parent population distribution using a histogram with density curve
-ggplot(df, aes(x = X)) + 
-  geom_histogram(aes(y = ..density..), bins = 30, fill = 'blue', alpha = 0.5, color = 'black') + 
-  geom_density(color = 'red', size = 1) + 
-  ggtitle("Parent Population Distribution (Histogram and Density)") + 
-  xlab("X") + 
-  ylab("Density")
 
 # Resampling: Number of samples and sample size
 sampling_means <- function(number_of_samples, parent_pop_df, sample_size) {
@@ -42,10 +33,26 @@ sampling_means <- function(number_of_samples, parent_pop_df, sample_size) {
   return(data.frame(X_mean = sampled_means))
 }
 
+
+## ====================================================
+
+# Make a parent population with a desired distribution
+df = generate_parent_pop(type_of_distribution = 'normal')
 # Generate sampled means from the parent population
 sampled_dist <- sampling_means(30, df, 150)
 sampled_mean = mean(sampled_dist$X_mean); sampled_mean
 sample_std = sd(sampled_dist$X_mean); sample_std
+
+
+## ============ Generating the plots =================
+
+# Plot the parent population distribution using a histogram with density curve
+ggplot(df, aes(x = X)) + 
+  geom_histogram(aes(y = ..density..), bins = 30, fill = 'blue', alpha = 0.5, color = 'black') + 
+  geom_density(color = 'red', size = 1) + 
+  ggtitle("Parent Population Distribution (Histogram and Density)") + 
+  xlab("X") + 
+  ylab("Density")
 
 # Plot the sampling distribution using a histogram with density curve
 ggplot(sampled_dist, aes(x = X_mean)) + 
